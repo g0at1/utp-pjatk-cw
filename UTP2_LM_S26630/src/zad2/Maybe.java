@@ -7,10 +7,10 @@ import java.util.function.Predicate;
 
 public class Maybe<T> {
 
-    private T value;
+    private T val;
 
-    public Maybe(T value) {
-        this.value = value;
+    public Maybe(T val) {
+        this.val = val;
     }
 
     public static <T> Maybe<T> of(T value) {
@@ -18,37 +18,37 @@ public class Maybe<T> {
     }
 
     public void ifPresent(Consumer<T> cons) {
-        if (value != null) {
-            cons.accept(value);
+        if (val != null) {
+            cons.accept(val);
         }
     }
 
     public <R> Maybe<R> map(Function<T, R> func) {
-        return value != null ? new Maybe<>(func.apply(value)) : new Maybe<>(null);
+        return val != null ? new Maybe<>(func.apply(val)) : new Maybe<>(null);
     }
 
     public T get() {
-        if (value != null) {
-            return value;
+        if (val != null) {
+            return val;
         } else {
             throw new NoSuchElementException("maybe is empty");
         }
     }
 
     public boolean isPresent() {
-        return value != null;
+        return val != null;
     }
 
     public T orElse(T defVal) {
-        return value != null ? value : defVal;
+        return val != null ? val : defVal;
     }
 
     public Maybe<T> filter(Predicate<T> pred) {
-        return value == null || pred.test(value) ? this : new Maybe<>(null);
+        return val == null || pred.test(val) ? this : new Maybe<>(null);
     }
 
     @Override
     public String toString() {
-        return value != null ? "Maybe has value " + value : "Maybe is empty";
+        return val != null ? "Maybe has value " + val : "Maybe is empty";
     }
 }
