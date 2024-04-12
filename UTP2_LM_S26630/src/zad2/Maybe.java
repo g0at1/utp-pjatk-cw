@@ -13,8 +13,8 @@ public class Maybe<T> {
         this.val = val;
     }
 
-    public static <T> Maybe<T> of(T value) {
-        return new Maybe<>(value);
+    public static <T> Maybe<T> of(T val) {
+        return new Maybe<>(val);
     }
 
     public void ifPresent(Consumer<T> cons) {
