@@ -4,18 +4,19 @@ import java.util.function.Function;
 
 public class InputConverter<T> {
 
-    private T input;
+    private T val;
 
-    public InputConverter(T t) {
-        this.input = t;
+    public InputConverter(T val) {
+        this.val = val;
     }
 
-    public <R> R convertBy(Function... converter) {
-        Object input = this.input, result = null;
-        for (Function f : converter) {
-            result = f.apply(input);
-            input = result;
+    public <R>R convertBy(Function... functions) {
+        Object val = this.val;
+        Object res = null;
+        for (Function fun : functions) {
+            res = fun.apply(val);
+            val = res;
         }
-        return (R) result;
+        return (R)res;
     }
 }

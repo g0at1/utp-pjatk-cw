@@ -27,46 +27,44 @@ public class Main {
      *  - collectInts - zwraca listę liczb całkowitych zawartych w napisie
      *  - sum - zwraca sumę elmentów listy liczb całkowitych
      */
-    Function<String, List<String>> flines = (fileName) -> {
-      List<String> lines = null;
-      try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-        lines = new ArrayList<>();
-        String line;
-        while ((line = br.readLine()) != null) {
-          lines.add(line);
+    Function<String, List<String>> flines = (file) -> {
+      List<String> fileLines = null;
+
+      try {
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+
+        fileLines = new ArrayList<>();
+
+        String currentLine;
+        while ((currentLine = br.readLine()) != null) {
+          fileLines.add(currentLine);
         }
+
+        br.close();
+        fr.close();
       } catch (IOException e) {
-        e.printStackTrace();
+        System.err.println("Error while reading file: " + e.getMessage());
       }
-      return lines;
+      return fileLines;
     };
 
-    Function<List<String>, String> join = (strings) -> {
-      StringBuilder sb = new StringBuilder();
-      for (String str : strings) {
-        sb.append(str);
-      }
-      return sb.toString();
-    };
+    Function<List<String>, String> join = (strings) -> String.join("", strings);
 
     Function<String, List<Integer>> collectInts = (text) -> {
       List<Integer> ints = new ArrayList<>();
-      String[] parts = text.split("\\D+");
-      for (String part : parts) {
+      String[] intsSplit = text.split("\\D+");
+
+      for (String part : intsSplit) {
         if (!part.isEmpty()) {
-          ints.add(Integer.parseInt(part));
+          ints.add(Integer.valueOf(part));
         }
       }
+
       return ints;
     };
 
-    Function<List<Integer>, Integer> sum = (integers) -> {
-      int s = 0;
-      for (int num : integers) {
-        s += num;
-      }
-      return s;
-    };
+    Function<List<Integer>, Integer> sum = (nums) -> nums.stream().reduce(0, Integer::sum);
 
     String fname = System.getProperty("user.home") + "/LamComFile.txt";
     InputConverter<String> fileConv = new InputConverter<>(fname);
