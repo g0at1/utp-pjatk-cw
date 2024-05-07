@@ -24,7 +24,7 @@ public class Finder {
         BufferedReader reader = new BufferedReader(fr);
         String line;
         while ((line = reader.readLine()) != null) {
-            if (line.contains("if") && !isInCommentOrString(line)) {
+            if (line.contains("if") && isNotInCommentOrString(line)) {
                 counter++;
             }
         }
@@ -39,7 +39,7 @@ public class Finder {
         BufferedReader reader = new BufferedReader(fr);
         String line;
         while ((line = reader.readLine()) != null) {
-            if (line.contains(str) && !isInCommentOrString(line)) {
+            if (line.contains(str) && isNotInCommentOrString(line)) {
                 counter++;
             }
         }
@@ -56,8 +56,8 @@ public class Finder {
         return line.contains("\"");
     }
 
-    public boolean isInCommentOrString(String line) {
-        return isInComment(line) || isInString(line);
+    public boolean isNotInCommentOrString(String line) {
+        return !isInComment(line) && !isInString(line);
     }
 
 }

@@ -24,13 +24,12 @@ public class Futil {
                             writer.newLine();
                         }
                     }
+
                     return FileVisitResult.CONTINUE;
                 }
             });
 
             writer.close();
-
-            System.out.println("Result saved to file named: " + resultFileName);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -6,31 +6,42 @@
 
 package zad1;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Main {
   public static void main(String[] args) throws IOException {
-    Map<String, List<String>> anagramsByWord = Files.lines(Paths.get("unixdict.txt"))
+    String url = "http://wiki.puzzlers.org/pub/wordlists/unixdict.txt";
+
+    Map<String, List<String>> anagramsByWord = new BufferedReader(new InputStreamReader(new URL(url).openStream()))
+            .lines()
             .collect(Collectors.groupingBy(Main::sortChars));
 
-    int maxAnagramsCount = anagramsByWord.values().stream()
+    int maxCount = anagramsByWord.values()
+            .stream()
             .mapToInt(List::size)
             .max()
             .orElse(0);
 
-    anagramsByWord.entrySet().stream()
-            .filter(entry -> entry.getValue().size() == maxAnagramsCount)
-            .forEach(entry -> System.out.println(entry.getKey() + " " + entry.getValue().stream().collect(Collectors.joining(" "))));
+    anagramsByWord.entrySet()
+            .stream()
+            .filter(entry -> entry.getValue().size() == maxCount)
+            .forEach(entry ->
+                    System.out.println(
+                            entry.getKey() + " " + String.join(" ", entry.getValue())
+                    )
+            );
   }
 
-  private static String sortChars(String word) {
-    return word.chars().sorted()
-            .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-            .toString();
+  private static String sortChars(String str) {
+    return str.chars()
+            .sorted()
+            .mapToObj(c -> String.valueOf((char) c))
+            .collect(Collectors.joining());
   }
 }
