@@ -6,7 +6,6 @@
 
 package zad2;
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,43 +20,44 @@ public class Finder {
     public int getIfCount() throws IOException {
         int counter = 0;
         FileReader fr = new FileReader(filePath);
-        BufferedReader reader = new BufferedReader(fr);
+        BufferedReader br = new BufferedReader(fr);
         String line;
-        while ((line = reader.readLine()) != null) {
-            if (line.contains("if") && isNotInCommentOrString(line)) {
+
+        while ((line = br.readLine()) != null) {
+            if (line.contains("if") && !line.trim().startsWith("//")) {
                 counter++;
             }
         }
-        reader.close();
+
+        br.close();
 
         return counter;
     }
 
-    public int getStringCount(String str) throws IOException {
+    public int getStringCount(String searchString) throws IOException {
         int counter = 0;
         FileReader fr = new FileReader(filePath);
-        BufferedReader reader = new BufferedReader(fr);
+        BufferedReader br = new BufferedReader(fr);
         String line;
-        while ((line = reader.readLine()) != null) {
-            if (line.contains(str) && isNotInCommentOrString(line)) {
-                counter++;
-            }
+
+        while ((line = br.readLine()) != null) {
+            counter += countOccurrences(line, searchString);
         }
-        reader.close();
+
+        br.close();
 
         return counter;
     }
 
-    public boolean isInComment(String line) {
-        return line.contains("//");
-    }
+    private int countOccurrences(String line, String str) {
+        int counter = 0;
+        int index = 0;
 
-    public boolean isInString(String line) {
-        return line.contains("\"");
-    }
+        while ((index = line.indexOf(str, index)) != -1) {
+            counter++;
+            index += str.length();
+        }
 
-    public boolean isNotInCommentOrString(String line) {
-        return !isInComment(line) && !isInString(line);
+        return counter;
     }
-
 }
