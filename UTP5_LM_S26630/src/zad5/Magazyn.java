@@ -3,29 +3,32 @@ package zad5;
 import java.util.ArrayList;
 
 public class Magazyn {
-    private final ArrayList<Towar> towary;
+
+    private ArrayList<Towar> towary;
     private boolean finished = false;
+
     public Magazyn(){
-        towary = new ArrayList<>();
-    }
-
-    public synchronized void add(Towar towar){
-        towary.add(towar);
-    }
-
-    public synchronized int getSize(){
-        return towary.size();
-    }
-
-    public synchronized void setFinished(){
-        finished = true;
-    }
-
-    public synchronized boolean isFinished(){
-        return finished;
+        this.towary = new ArrayList<>();
     }
 
     public synchronized ArrayList<Towar> getTowary(int start, int stop) {
-        return new ArrayList<>(towary.subList(start, stop));
+        return new ArrayList<>(this.towary.subList(start, stop));
     }
+
+    public synchronized void add(Towar towar){
+        this.towary.add(towar);
+    }
+
+    public synchronized int getSize(){
+        return this.towary.size();
+    }
+
+    public synchronized boolean isFinished(){
+        return this.finished;
+    }
+
+    public synchronized void setFinished(){
+        this.finished = true;
+    }
+
 }

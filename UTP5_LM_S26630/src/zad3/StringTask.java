@@ -1,56 +1,63 @@
 package zad3;
 
 class StringTask implements Runnable {
-    private String result;
-    private TaskState state;
-    private String inputString;
-    private int repetitions;
-    private Thread workerThread;
 
-    public StringTask(String inputString, int repetitions) {
-        this.inputString = inputString;
-        this.repetitions = repetitions;
+    private TaskState state;
+    private String result;
+    private String input;
+    private Thread thread;
+    private int cycles;
+
+    public StringTask(String input, int cycles) {
+        this.input = input;
+        this.cycles = cycles;
         this.state = TaskState.CREATED;
     }
 
     public String getResult() {
-        return result;
+        return this.result;
     }
 
     public TaskState getState() {
-        return state;
+        return this.state;
     }
 
     public void start() {
-        if (state == TaskState.CREATED) {
-            state = TaskState.RUNNING;
-            workerThread = new Thread(this);
-            workerThread.start();
+        if (this.state == TaskState.CREATED) {
+
+            this.state = TaskState.RUNNING;
+            this.thread = new Thread(this);
+            this.thread.start();
         }
     }
 
     public void abort() {
-        if (state == TaskState.RUNNING) {
-            workerThread.interrupt();
-            state = TaskState.ABORTED;
+        if (this.state == TaskState.RUNNING) {
+
+            this.thread.interrupt();
+            this.state = TaskState.ABORTED;
         }
     }
 
     public boolean isDone() {
-        return state == TaskState.READY || state == TaskState.ABORTED;
+        return this.state == TaskState.ABORTED || this.state == TaskState.READY;
     }
 
     @Override
     public void run() {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < repetitions; i++) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < this.cycles; i++) {
             if (Thread.currentThread().isInterrupted()) {
-                state = TaskState.ABORTED;
+                this.state = TaskState.ABORTED;
+
                 return;
             }
-            builder.append(inputString);
+
+            stringBuilder.append(this.input);
         }
-        result = builder.toString();
-        state = TaskState.READY;
+
+        this.result = stringBuilder.toString();
+        this.state = TaskState.READY;
     }
 }
