@@ -1,5 +1,6 @@
 package zad1;
 
+import java.awt.event.WindowAdapter;
 import java.sql.*;
 import java.util.List;
 import javax.swing.*;

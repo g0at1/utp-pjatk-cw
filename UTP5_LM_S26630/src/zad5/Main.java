@@ -6,7 +6,6 @@
 
 package zad5;
 
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -32,13 +31,12 @@ public class Main {
       for (String line : lines) {
         String[] linesSplit = line.split(" ");
 
-        Towar towar = new Towar(
-                Integer.parseInt(linesSplit[0]), Double.parseDouble(linesSplit[1])
-        );
+        Towar towar = new Towar(Integer.parseInt(linesSplit[0]),
+            Double.parseDouble(linesSplit[1]));
 
         magazyn.add(towar);
 
-        if(magazyn.getSize() % 200 == 0 && magazyn.getSize() != 0){
+        if (magazyn.getSize() % 200 == 0 && magazyn.getSize() != 0) {
           System.out.println("utworzono " + magazyn.getSize() + " obiektów");
         }
       }
@@ -51,22 +49,21 @@ public class Main {
       int size = 0;
 
       do {
-        if (size != magazyn.getSize()){
+        if (size != magazyn.getSize()) {
           ArrayList<Towar> towary = magazyn.getTowary(size, magazyn.getSize());
           for (Towar towar : towary) {
             weight += towar.getWeight();
             size++;
-            if (size % 100 == 0 && size != 0){
+            if (size % 100 == 0 && size != 0) {
               System.out.println("policzono wage " + size + " towarów");
             }
           }
         }
-      } while(!magazyn.isFinished() || size != magazyn.getSize());
+      } while (!magazyn.isFinished() || size != magazyn.getSize());
 
       System.out.println(weight);
     });
 
     service.shutdown();
   }
-
 }
