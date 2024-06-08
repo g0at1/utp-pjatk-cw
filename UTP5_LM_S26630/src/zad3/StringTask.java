@@ -11,6 +11,7 @@ class StringTask implements Runnable {
   public StringTask(String input, int cycles) {
     this.input = input;
     this.cycles = cycles;
+    this.thread = new Thread(this);
     this.state = TaskState.CREATED;
   }
 
@@ -23,20 +24,11 @@ class StringTask implements Runnable {
   }
 
   public void start() {
-    if (this.state == TaskState.CREATED) {
-
-      this.state = TaskState.RUNNING;
-      this.thread = new Thread(this);
-      this.thread.start();
-    }
+    this.thread.start();
   }
 
   public void abort() {
-    if (this.state == TaskState.RUNNING) {
-
-      this.thread.interrupt();
-      this.state = TaskState.ABORTED;
-    }
+    this.thread.interrupt();
   }
 
   public boolean isDone() {
@@ -45,19 +37,18 @@ class StringTask implements Runnable {
 
   @Override
   public void run() {
-    StringBuilder stringBuilder = new StringBuilder();
+    String result = "";
 
     for (int i = 0; i < this.cycles; i++) {
       if (Thread.currentThread().isInterrupted()) {
         this.state = TaskState.ABORTED;
-
         return;
       }
 
-      stringBuilder.append(this.input);
+      result += this.input;
     }
 
-    this.result = stringBuilder.toString();
+    this.result = result;
     this.state = TaskState.READY;
   }
 }

@@ -23,7 +23,7 @@ public class Main {
     service.execute(() -> {
       List<String> lines = null;
       try {
-        lines = Files.readAllLines(Paths.get("Towary.txt"));
+        lines = Files.readAllLines(Paths.get("../Towary.txt"));
       } catch (IOException e) {
         e.printStackTrace();
       }
