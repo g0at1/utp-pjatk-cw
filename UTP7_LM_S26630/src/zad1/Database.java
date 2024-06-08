@@ -1,36 +1,42 @@
 package zad1;
 
-import java.awt.event.WindowAdapter;
 import java.sql.*;
-import java.util.List;
-import javax.swing.*;
 
 public class Database {
+
+
   private String url;
   private TravelData travelData;
 
-  public Database(String url, TravelData travelData) {
-    this.url = url;
+  Database(String url, TravelData travelData) {
     this.travelData = travelData;
+    this.url = url;
   }
 
-  public void create() {
+  void create() {
+    try (Connection conn = DriverManager.getConnection(url)) {
+      if (conn != null) {
+        conn.getMetaData();
+      }
+
+      assert conn != null;
+      Statement statement = conn.createStatement();
+      statement.execute("CREATE TABLE IF NOT EXISTS traveldata (data TEXT NOT NULL);");
+
+      PreparedStatement preparedStatement
+              = conn.prepareStatement("insert into traveldata (data) values (?)");
+
+      for (Record r : travelData.getData()) {
+        preparedStatement.setString(1, r.toString());
+        preparedStatement.execute();
+      }
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
-  public void showGui() {
-    SwingUtilities.invokeLater(() -> {
-      JFrame frame = new JFrame("Travel Offers");
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-      String[] columnNames = { "Country", "Start Date", "End Date",
-          "Place", "Price", "Currency" };
-      String[][] data = retrieveOffers();
-
-      JTable table = new JTable(data, columnNames);
-      frame.add(new JScrollPane(table));
-
-      frame.pack();
-      frame.setVisible(true);
-    });
+  void showGui() {
+    new MainWindow(travelData.getData());
   }
 }
